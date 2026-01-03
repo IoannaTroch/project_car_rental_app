@@ -64,7 +64,7 @@ For the application to function correctly, all files and images must be located 
 ├── view.py
 ├── model.py
 ├── admin.py
-├── car_rental_db_attempt6.db
+├── car_rental_db_attempt8.db
 ├── system_errors.log
 ├── *.png (all car images: suv.png, van.png, etc.)
 └── *.jpg (background images: bmw_login.jpg, etc.)
