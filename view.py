@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 import os
 import sys
 from datetime import datetime, date, timedelta
-import queue  
+import queue  # <--- REQUIRED FOR ADMIN CONSOLE
 
 try:
     from tkcalendar import Calendar
@@ -182,6 +182,7 @@ class RentalView(tk.Tk):
         filename = file_map.get(sub_name, "default.png")
         try:
             if filename not in self.card_images:
+                # Use helper here too
                 img = Image.open(get_resource_path(filename)).resize((220, 140), Image.Resampling.LANCZOS)
                 self.card_images[filename] = ImageTk.PhotoImage(img)
             img_label = tk.Label(inner, image=self.card_images[filename], bg=inner_bg)
@@ -332,7 +333,7 @@ class RentalView(tk.Tk):
         cv_frame = tk.Frame(row, bg="#222222"); cv_frame.pack(side="right", fill="x", expand=True)
         tk.Label(cv_frame, text="CVV", bg="#222222", fg="#aaaaaa", font=("Arial", 9)).pack(anchor="w")
         
-
+        # --- NEW CODE: CVV INPUT LIMITER (ONLY 3 DIGITS) ---
         cv_var = tk.StringVar(); self.payment_vars["cvv"] = cv_var
         
         def limit_cvv(*args):
@@ -342,7 +343,7 @@ class RentalView(tk.Tk):
             if val != clean: cv_var.set(clean)
             
         cv_var.trace_add("write", limit_cvv)
-
+        # ---------------------------------------------------
         
         tk.Entry(cv_frame, textvariable=cv_var, show="*", **entry_style).pack(fill="x", pady=(2, 10), ipady=5)
 
@@ -352,7 +353,7 @@ class RentalView(tk.Tk):
 
     def get_payment_data(self): return {k: v.get() for k, v in self.payment_vars.items()}
 
-# --- PSEUDO-CONSOLE 
+# --- SAFEST PSEUDO-CONSOLE (THREAD-SAFE VERSION) ---
 class PseudoConsole(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
@@ -372,10 +373,11 @@ class PseudoConsole(tk.Toplevel):
         self.input_field.pack(side="left", fill='x', expand=True, ipady=5)
         self.input_field.bind("<Return>", self.submit_input); self.input_field.focus_set()
         
-        self.input_queue = queue.Queue() 
+        self.input_queue = queue.Queue() # Using the imported queue
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.is_active = True
 
+    # FIX: Thread Safety (Using after)
     def write(self, text):
         self.after(0, self._safe_append, text)
 
@@ -396,7 +398,7 @@ class PseudoConsole(tk.Toplevel):
     def submit_input(self, event):
         text = self.input_var.get(); self.input_var.set("")
         self.write(f">>> {text}\n")
-        self.input_queue.put(text + "\n") 
+        self.input_queue.put(text + "\n") # Fix EOF Error
 
     def on_close(self):
         self.is_active = False
