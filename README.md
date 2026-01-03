@@ -20,7 +20,7 @@ The project consists of the following main files:
 - **`admin.py`**  
   Contains administrative features and elevated permissions.
 
-- **`car_rental_db_attempt6.db`**  
+- **`car_rental_db_attempt8.db`**  
   SQLite database storing vehicles, customers, and reservations.
 
 ## Technical Features & Libraries
