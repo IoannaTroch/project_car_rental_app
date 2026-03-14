@@ -3,6 +3,10 @@
 
 A desktop application for **fleet, customer, and reservation management**, developed in **Python** using the **MVC (Model–View–Controller)** architecture.
 
+## App Screenshots
+![Start Interface](interface1.png)
+![Info Interface](interface2.png)
+
 ## Project Structure
 
 The project consists of the following main files:
