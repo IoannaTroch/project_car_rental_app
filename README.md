@@ -5,14 +5,11 @@ A desktop application for **fleet, customer, and reservation management**, devel
 
 ## App Screenshots
 
-
 <p align="center">
   <img src="interface1.png" width="600" alt="Main Interface">
   <br><br>
   <img src="interface2.png" width="600" alt="Info Interface">
 </p>
-![Start Interface](interface1.png)
-![Info Interface](interface2.png)
 
 ## Project Structure
 
